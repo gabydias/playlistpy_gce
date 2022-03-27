@@ -1,0 +1,1 @@
+app: /opt/app/env/bin/gunicorn -b 0.0.0.0:80 app:app
