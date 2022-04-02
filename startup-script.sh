@@ -1,17 +1,3 @@
-# Copyright 2019 Google LLC All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # Echo commands
 set -v
 
@@ -19,8 +5,20 @@ set -v
 
 # Install or update needed software
 apt-get update
-apt-get install -yq git supervisor python3 python3-pip python3-distutils
-pip3 install --upgrade pip3 virtualenv
+apt-get install -yq git mysql-server supervisor python python-pip python3-distutils
+
+## MySQL Config
+export PASSWORD=`openssl rand -base64 32`; echo "Root password is : $PASSWORD"
+echo "ALTER USER 'root'@'localhost'
+      IDENTIFIED WITH mysql_native_password BY '$PASSWORD'" \
+      | sudo mysql -u root
+
+mysql -h 127.0.0.1 -P 3306 -u root -p$PASSWORD -e "CREATE USER 'playuser'@'%' IDENTIFIED BY '123456';"
+mysql -h 127.0.0.1 -P 3306 -u root -p$PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'playuser'@'%' WITH GRANT OPTION;"
+mysql -h 127.0.0.1 -P 3306 -u playuser -p123456 < Playlist.sql 
+
+## App Deploy
+pip install --upgrade pip virtualenv
 
 # Account to own server process
 useradd -m -d /home/pythonapp pythonapp
@@ -30,9 +28,9 @@ export HOME=/root
 git clone https://github.com/gabydias/playlistpy_gce.git /opt/app
 
 # Python environment setup
-virtualenv -p python3 /opt/app/env
+virtualenv -p python /opt/app/env
 /bin/bash -c "source /opt/app/env/bin/activate"
-/opt/app/env/bin/pip3 install -r /opt/app/requirements.txt
+/opt/app/env/bin/pip install -r /opt/app/requirements.txt
 
 # Set ownership to newly created account
 chown -R pythonapp:pythonapp /opt/app

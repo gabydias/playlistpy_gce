@@ -3,7 +3,7 @@ from db import get_songs
 
 app = Flask(__name__)
 
-@app.route('/playlist')
+@app.route('/')
 def songs():
 
     return get_songs()
