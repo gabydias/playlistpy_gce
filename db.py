@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 import pymysql
+from importlib import reload
 from flask import jsonify
 from json2html import *
 import sys
 reload(sys)
-sys.setdefaultencoding('utf-8')
 
 db_user = os.environ.get('CLOUD_SQL_USERNAME')
 db_password = os.environ.get('CLOUD_SQL_PASSWORD')

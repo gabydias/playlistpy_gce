@@ -1,11 +1,12 @@
 # Echo commands
 set -v
 
+# Compatible: Ubuntu 20.04
 # [START getting_started_gce_startup_script]
 
 # Install or update needed software
 apt-get update
-apt-get install -yq git wget supervisor python python-pip python3-distutils
+apt-get install -yq git wget supervisor python python3-pip python3-distutils
 wget https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb
 
 ## App Deploy
@@ -32,7 +33,8 @@ cp /opt/app/python-app.conf /etc/supervisor/conf.d/python-app.conf
 ## MySQL Config
 dpkg -i mysql-apt-config_0.8.22-1_all.deb
 apt-get update
-apt-get install -yq git mysql-server
+export DEBIAN_FRONTEND=noninteractive
+apt-get install -yq mysql-server
 
 export PASSWORD=`openssl rand -base64 32`; echo "Root password is : $PASSWORD"
 echo "ALTER USER 'root'@'localhost'
