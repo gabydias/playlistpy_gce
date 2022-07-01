@@ -31,9 +31,9 @@ chown -R pythonapp:pythonapp /opt/app
 cp /opt/app/python-app.conf /etc/supervisor/conf.d/python-app.conf
 
 ## MySQL Config
+export DEBIAN_FRONTEND=noninteractive
 dpkg -i mysql-apt-config_0.8.22-1_all.deb
 apt-get update
-export DEBIAN_FRONTEND=noninteractive
 apt-get install -yq mysql-server
 
 export PASSWORD=`openssl rand -base64 32`; echo "Root password is : $PASSWORD"
