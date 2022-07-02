@@ -1,7 +1,7 @@
 # Echo commands
 set -v
 
-# Compatible: Ubuntu 20.04
+# Compatible: Ubuntu 20.04 e Debian 11
 # [START getting_started_gce_startup_script]
 
 # Install or update needed software
